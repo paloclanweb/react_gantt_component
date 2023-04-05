@@ -58,11 +58,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
-  onDateChange,
   onProgressChange,
   onDoubleClick,
   onClick,
-  onDelete,
   onSelect,
   onExpanderClick,
 }) => {
@@ -424,11 +422,9 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setGanttEvent,
     setFailedTask,
     setSelectedTask: handleSelectedTask,
-    onDateChange,
     onProgressChange,
     onDoubleClick,
     onClick,
-    onDelete,
   };
 
   const tableProps: TaskListProps = {

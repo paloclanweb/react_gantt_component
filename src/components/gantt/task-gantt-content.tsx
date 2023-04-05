@@ -50,11 +50,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   setGanttEvent,
   setFailedTask,
   setSelectedTask,
-  onDateChange,
   onProgressChange,
   onDoubleClick,
   onClick,
-  onDelete,
 }) => {
   const point = svg?.current?.createSVGPoint();
   const [xStep, setXStep] = useState(0);
@@ -128,24 +126,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       setIsMoving(false);
 
       // custom operation start
-      let operationSuccess = true;
-      if (
-        (action === "move" || action === "end" || action === "start") &&
-        onDateChange &&
-        isNotLikeOriginal
-      ) {
-        try {
-          const result = await onDateChange(
-            newChangedTask,
-            newChangedTask.barChildren
-          );
-          if (result !== undefined) {
-            operationSuccess = result;
-          }
-        } catch (error) {
-          operationSuccess = false;
-        }
-      } else if (onProgressChange && isNotLikeOriginal) {
+      let operationSuccess = true; if (onProgressChange && isNotLikeOriginal) {
         try {
           const result = await onProgressChange(
             newChangedTask,
@@ -183,7 +164,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     initEventX1Delta,
     onProgressChange,
     timeStep,
-    onDateChange,
     svg,
     isMoving,
     point,
@@ -203,21 +183,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     if (!event) {
       if (action === "select") {
         setSelectedTask(task.id);
-      }
-    }
-    // Keyboard events
-    else if (isKeyboardEvent(event)) {
-      if (action === "delete") {
-        if (onDelete) {
-          try {
-            const result = await onDelete(task);
-            if (result !== undefined && result) {
-              setGanttEvent({ action, changedTask: task });
-            }
-          } catch (error) {
-            console.error("Error on Delete. " + error);
-          }
-        }
       }
     }
     // Mouse Events
@@ -287,7 +252,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               arrowIndent={arrowIndent}
               taskHeight={taskHeight}
               isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              isDateChangeable={!!onDateChange && !task.isDisabled}
+              isDateChangeable={!task.isDisabled}
               isDelete={!task.isDisabled}
               onEventStart={handleBarEventStart}
               key={task.id}

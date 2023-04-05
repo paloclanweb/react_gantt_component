@@ -51,23 +51,12 @@ export interface EventOption {
    */
   onClick?: (task: Task) => void;
   /**
-   * Invokes on end and start time change. Chart undoes operation if method return false or error.
-   */
-  onDateChange?: (
-    task: Task,
-    children: Task[]
-  ) => void | boolean | Promise<void> | Promise<boolean>;
-  /**
    * Invokes on progress change. Chart undoes operation if method return false or error.
    */
   onProgressChange?: (
     task: Task,
     children: Task[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
-  /**
-   * Invokes on delete selected task. Chart undoes operation if method return false or error.
-   */
-  onDelete?: (task: Task) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Invokes on expander on task list
    */
