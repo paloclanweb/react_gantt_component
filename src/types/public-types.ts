@@ -38,29 +38,6 @@ export interface EventOption {
    * Time step value for date changes.
    */
   timeStep?: number;
-  /**
-   * Invokes on bar select on unselect.
-   */
-  onSelect?: (task: Task, isSelected: boolean) => void;
-  /**
-   * Invokes on bar double click.
-   */
-  onDoubleClick?: (task: Task) => void;
-  /**
-   * Invokes on bar click.
-   */
-  onClick?: (task: Task) => void;
-  /**
-   * Invokes on progress change. Chart undoes operation if method return false or error.
-   */
-  onProgressChange?: (
-    task: Task,
-    children: Task[]
-  ) => void | boolean | Promise<void> | Promise<boolean>;
-  /**
-   * Invokes on expander on task list
-   */
-  onExpanderClick?: (task: Task) => void;
 }
 
 export interface DisplayOption {
@@ -120,12 +97,6 @@ export interface StylingOption {
     fontSize: string;
     locale: string;
     tasks: Task[];
-    selectedTaskId: string;
-    /**
-     * Sets selected task by id
-     */
-    setSelectedTask: (taskId: string) => void;
-    onExpanderClick: (task: Task) => void;
   }>;
 }
 

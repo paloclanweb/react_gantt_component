@@ -3,16 +3,9 @@
   outline: none;
 }
 
-.barWrapper:hover .barHandle {
+.barWrapper:hove {
   visibility: visible;
   opacity: 1;
-}
-
-.barHandle {
-  fill: #ddd;
-  cursor: ew-resize;
-  opacity: 0;
-  visibility: hidden;
 }
 
 .barBackground {

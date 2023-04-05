@@ -18,10 +18,8 @@ import { TaskListProps, TaskList } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { BarTask } from "../../types/bar-task";
 import { convertToBarTasks } from "../../helpers/bar-helper";
-import { GanttEvent } from "../../types/gantt-task-actions";
 import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-import { removeHiddenTasks, sortTasks } from "../../helpers/other-helper";
 import styles from "./gantt.module.css";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
@@ -57,12 +55,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   viewDate,
   TooltipContent = StandardTooltipContent,
   TaskListHeader = TaskListHeaderDefault,
-  TaskListTable = TaskListTableDefault,
-  onProgressChange,
-  onDoubleClick,
-  onClick,
-  onSelect,
-  onExpanderClick,
+  TaskListTable = TaskListTableDefault
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -75,18 +68,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   );
 
   const [taskListWidth, setTaskListWidth] = useState(0);
-  const [svgContainerWidth, setSvgContainerWidth] = useState(0);
-  const [svgContainerHeight, setSvgContainerHeight] = useState(ganttHeight);
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
-  const [ganttEvent, setGanttEvent] = useState<GanttEvent>({
-    action: "",
-  });
   const taskHeight = useMemo(
     () => (rowHeight * barFill) / 100,
     [rowHeight, barFill]
   );
 
-  const [selectedTask, setSelectedTask] = useState<BarTask>();
+  
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
 
   const svgWidth = dateSetup.dates.length * columnWidth;
@@ -99,12 +87,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   // task change events
   useEffect(() => {
     let filteredTasks: Task[];
-    if (onExpanderClick) {
-      filteredTasks = removeHiddenTasks(tasks);
-    } else {
-      filteredTasks = tasks;
-    }
-    filteredTasks = filteredTasks.sort(sortTasks);
+    filteredTasks = tasks;
     const [startDate, endDate] = ganttDateRange(
       filteredTasks,
       viewMode,
@@ -161,7 +144,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     milestoneBackgroundSelectedColor,
     rtl,
     scrollX,
-    onExpanderClick,
   ]);
 
   useEffect(() => {
@@ -193,35 +175,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     setCurrentViewDate,
   ]);
 
-  useEffect(() => {
-    const { changedTask, action } = ganttEvent;
-    if (changedTask) {
-      if (action === "delete") {
-        setGanttEvent({ action: "" });
-        setBarTasks(barTasks.filter(t => t.id !== changedTask.id));
-      } else if (
-        action === "move" ||
-        action === "end" ||
-        action === "start" ||
-        action === "progress"
-      ) {
-        const prevStateTask = barTasks.find(t => t.id === changedTask.id);
-        if (
-          prevStateTask &&
-          (prevStateTask.start.getTime() !== changedTask.start.getTime() ||
-            prevStateTask.end.getTime() !== changedTask.end.getTime() ||
-            prevStateTask.progress !== changedTask.progress)
-        ) {
-          // actions for change
-          const newTaskList = barTasks.map(t =>
-            t.id === changedTask.id ? changedTask : t
-          );
-          setBarTasks(newTaskList);
-        }
-      }
-    }
-  }, [ganttEvent, barTasks]);
-
+  
   useEffect(() => {
     if (failedTask) {
       setBarTasks(barTasks.map(t => (t.id !== failedTask.id ? t : failedTask)));
@@ -238,19 +192,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
   }, [taskListRef, listCellWidth]);
 
-  useEffect(() => {
-    if (wrapperRef.current) {
-      setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
-    }
-  }, [wrapperRef, taskListWidth]);
-
-  useEffect(() => {
-    if (ganttHeight) {
-      setSvgContainerHeight(ganttHeight + headerHeight);
-    } else {
-      setSvgContainerHeight(tasks.length * rowHeight + headerHeight);
-    }
-  }, [ganttHeight, tasks, headerHeight, rowHeight]);
+  
 
   // scroll events
   useEffect(() => {
@@ -365,26 +307,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   /**
    * Task select event
    */
-  const handleSelectedTask = (taskId: string) => {
-    const newSelectedTask = barTasks.find(t => t.id === taskId);
-    const oldSelectedTask = barTasks.find(
-      t => !!selectedTask && t.id === selectedTask.id
-    );
-    if (onSelect) {
-      if (oldSelectedTask) {
-        onSelect(oldSelectedTask, false);
-      }
-      if (newSelectedTask) {
-        onSelect(newSelectedTask, true);
-      }
-    }
-    setSelectedTask(newSelectedTask);
-  };
-  const handleExpanderClick = (task: Task) => {
-    if (onExpanderClick && task.hideChildren !== undefined) {
-      onExpanderClick({ ...task, hideChildren: !task.hideChildren });
-    }
-  };
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -406,25 +328,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
-    dates: dateSetup.dates,
-    ganttEvent,
-    selectedTask,
     rowHeight,
     taskHeight,
-    columnWidth,
     arrowColor,
     timeStep,
     fontFamily,
     fontSize,
     arrowIndent,
-    svgWidth,
     rtl,
-    setGanttEvent,
-    setFailedTask,
-    setSelectedTask: handleSelectedTask,
-    onProgressChange,
-    onDoubleClick,
-    onClick,
   };
 
   const tableProps: TaskListProps = {
@@ -438,10 +349,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     scrollY,
     ganttHeight,
     horizontalContainerClass: styles.horizontalContainer,
-    selectedTask,
     taskListRef,
-    setSelectedTask: handleSelectedTask,
-    onExpanderClick: handleExpanderClick,
     TaskListHeader,
     TaskListTable,
   };
@@ -462,24 +370,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           scrollY={scrollY}
           scrollX={scrollX}
         />
-        {ganttEvent.changedTask && (
-          <Tooltip
-            arrowIndent={arrowIndent}
-            rowHeight={rowHeight}
-            svgContainerHeight={svgContainerHeight}
-            svgContainerWidth={svgContainerWidth}
-            fontFamily={fontFamily}
-            fontSize={fontSize}
-            scrollX={scrollX}
-            scrollY={scrollY}
-            task={ganttEvent.changedTask}
-            headerHeight={headerHeight}
-            taskListWidth={taskListWidth}
-            TooltipContent={TooltipContent}
-            rtl={rtl}
-            svgWidth={svgWidth}
-          />
-        )}
         <VerticalScroll
           ganttFullHeight={ganttFullHeight}
           ganttHeight={ganttHeight}

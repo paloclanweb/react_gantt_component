@@ -6,7 +6,6 @@ type BarDisplayProps = {
   y: number;
   width: number;
   height: number;
-  isSelected: boolean;
   /* progress start point */
   progressX: number;
   progressWidth: number;
@@ -17,30 +16,28 @@ type BarDisplayProps = {
     progressColor: string;
     progressSelectedColor: string;
   };
-  onMouseDown: (event: React.MouseEvent<SVGPolygonElement, MouseEvent>) => void;
+  
 };
 export const BarDisplay: React.FC<BarDisplayProps> = ({
   x,
   y,
   width,
   height,
-  isSelected,
   progressX,
   progressWidth,
   barCornerRadius,
   styles,
-  onMouseDown,
 }) => {
   const getProcessColor = () => {
-    return isSelected ? styles.progressSelectedColor : styles.progressColor;
+    return styles.progressColor;
   };
 
   const getBarColor = () => {
-    return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
+    return styles.backgroundColor;
   };
 
   return (
-    <g onMouseDown={onMouseDown}>
+    <g>
       <rect
         x={x}
         width={width}

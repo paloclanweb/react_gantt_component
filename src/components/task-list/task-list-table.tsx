@@ -28,9 +28,6 @@ export const TaskListTableDefault: React.FC<{
   fontSize: string;
   locale: string;
   tasks: Task[];
-  selectedTaskId: string;
-  setSelectedTask: (taskId: string) => void;
-  onExpanderClick: (task: Task) => void;
 }> = ({
   rowHeight,
   rowWidth,
@@ -38,7 +35,6 @@ export const TaskListTableDefault: React.FC<{
   fontFamily,
   fontSize,
   locale,
-  onExpanderClick,
 }) => {
   const toLocaleDateString = useMemo(
     () => toLocaleDateStringFactory(locale),
@@ -76,14 +72,7 @@ export const TaskListTableDefault: React.FC<{
               title={t.name}
             >
               <div className={styles.taskListNameWrapper}>
-                <div
-                  className={
-                    expanderSymbol
-                      ? styles.taskListExpander
-                      : styles.taskListEmptyExpander
-                  }
-                  onClick={() => onExpanderClick(t)}
-                >
+                <div>
                   {expanderSymbol}
                 </div>
                 <div>{t.name}</div>
