@@ -19,7 +19,7 @@ import { BarTask } from "../../types/bar-task";
 import { convertToBarTasks } from "../../helpers/bar-helper";
 import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-import styles from "./gantt.module.css";
+import tw from "twin.macro";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -172,7 +172,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     currentViewDate,
     setCurrentViewDate,
   ]);
-
   
   useEffect(() => {
     if (failedTask) {
@@ -188,9 +187,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     if (taskListRef.current) {
       setTaskListWidth(taskListRef.current.offsetWidth);
     }
-  }, [taskListRef, listCellWidth]);
-
-  
+  }, [taskListRef, listCellWidth]);  
 
   // scroll events
   useEffect(() => {
@@ -336,6 +333,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rtl,
   };
 
+  const styles = {
+    wrapper: tw`relative flex p-0 m-0`,
+  }
+
   const tableProps: TaskListProps = {
     rowHeight,
     rowWidth: listCellWidth,
@@ -346,7 +347,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     headerHeight,
     scrollY,
     ganttHeight,
-    horizontalContainerClass: styles.horizontalContainer,
     taskListRef,
     TaskListHeader,
     TaskListTable,
@@ -354,12 +354,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   return (
     <div>
       <div
-        className={styles.wrapper}
+        css={[styles.wrapper]}
         onKeyDown={handleKeyDown}
         tabIndex={0}
         ref={wrapperRef}
       >
-        {listCellWidth && <TaskList {...tableProps} />}
+        {listCellWidth ? <TaskList {...tableProps} /> : null}
         <TaskGantt
           gridProps={gridProps}
           calendarProps={calendarProps}

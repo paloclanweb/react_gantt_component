@@ -1,6 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const tailwindForms = require("@tailwindcss/forms");
-
 module.exports = {
   mode: "jit",
   darkMode: "media",
@@ -373,6 +371,5 @@ module.exports = {
     },
   },
   plugins: [
-    tailwindForms({ strategy: "class" }),
   ],
 };

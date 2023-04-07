@@ -1,9 +1,8 @@
-import React from "react";
-import { getStartEndDateForProject, initTasks } from "./helper";
-import { Task, ViewMode } from "./types/public-types";
-import { Gantt } from "./components/gantt/gantt";
+import React from 'react'
+import { Task, ViewMode } from './types/public-types';
+import { initTasks } from './helper';
+import { Gantt } from './components/gantt/gantt';
 
-// Init
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
@@ -20,5 +19,4 @@ const App = () => {
     </div>
   );
 };
-
-export default App;
+export default App
