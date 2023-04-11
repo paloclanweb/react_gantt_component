@@ -122,26 +122,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       )
     );
   }, [
-    tasks,
-    viewMode,
-    preStepsCount,
-    rowHeight,
-    barCornerRadius,
-    columnWidth,
-    taskHeight,
-    handleWidth,
-    barProgressColor,
-    barProgressSelectedColor,
-    barBackgroundColor,
-    barBackgroundSelectedColor,
-    projectProgressColor,
-    projectProgressSelectedColor,
-    projectBackgroundColor,
-    projectBackgroundSelectedColor,
-    milestoneBackgroundColor,
-    milestoneBackgroundSelectedColor,
-    rtl,
-    scrollX,
+    tasks, viewMode, preStepsCount
   ]);
 
   useEffect(() => {
