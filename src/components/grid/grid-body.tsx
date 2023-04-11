@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Task } from "../../types/public-types";
 import { addToDate } from "../../helpers/date-helper";
-import styles from "./grid.module.css";
+import tw, { css } from "twin.macro";
 
 export type GridBodyProps = {
   tasks: Task[];
@@ -12,6 +12,16 @@ export type GridBodyProps = {
   todayColor: string;
   rtl: boolean;
 };
+const styles = {
+  gridRow: css`
+  ${tw`fill-white`}
+  &:nth-of-type(even) {
+    ${tw`fill-purple-100`}
+  }`,
+  gridRowLine: tw`stroke-[#ebeff2]`,
+  gridTick: tw`stroke-[#e6e4e4]`,
+}
+
 export const GridBody: React.FC<GridBodyProps> = ({
   tasks,
   dates,
@@ -30,7 +40,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
       y1={0}
       x2={svgWidth}
       y2={0}
-      className={styles.gridRowLine}
+      css={[styles.gridRowLine]}
     />,
   ];
   for (const task of tasks) {
@@ -41,7 +51,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y={y}
         width={svgWidth}
         height={rowHeight}
-        className={styles.gridRow}
+        css={[styles.gridRow]}
       />
     );
     rowLines.push(
@@ -51,7 +61,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y1={y + rowHeight}
         x2={svgWidth}
         y2={y + rowHeight}
-        className={styles.gridRowLine}
+        css={[styles.gridRowLine]}
       />
     );
     y += rowHeight;
@@ -70,7 +80,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         y1={0}
         x2={tickX}
         y2={y}
-        className={styles.gridTick}
+        css={[styles.gridTick]}
       />
     );
     if (

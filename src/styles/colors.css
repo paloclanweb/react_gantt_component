@@ -1,0 +1,170 @@
+:root {
+    /* Blues */
+    --blue-100: #e0edfe;
+    --blue-200: #7faaf5;
+    --blue-300: #367ff6;
+    --blue-400: #2e59a3;
+    --blue-500: #1d3766;
+  
+    /* Reds */
+    --red-100: #fee0e0;
+    --red-200: #eb6767;
+    --red-300: #f53131;
+    --red-400: #b81d1d;
+    --red-500: #7a0a0a;
+  
+    /* Purples */
+    --purple-100: #efe9fe;
+    --purple-200: #b093f5;
+    --purple-300: #8959f6;
+    --purple-400: #6338c7;
+    --purple-500: #33215c;
+  
+    /* Greens */
+    --green-100: #e0ffec;
+    --green-200: #6fd695;
+    --green-300: #20c75d;
+    --green-400: #147a3a;
+    --green-500: #125229;
+  
+    /* Oranges */
+    --orange-100: #ffe6d5;
+    --orange-200: #f5ae7f;
+    --orange-300: #f56e14;
+    --orange-400: #b85716;
+    --orange-500: #7a320e;
+  
+    /* Yellows */
+    --yellow-100: #fef6d5;
+    --yellow-200: #f5d762;
+    --yellow-300: #f5c814;
+    --yellow-400: #b88e1d;
+    --yellow-500: #705509;
+  
+    /* Pink */
+    --pink-100: #ffeaf6;
+    --pink-200: #eb7ab5;
+    --pink-300: #ec4899;
+    --pink-400: #b81d5d;
+    --pink-500: #700932;
+  
+    /* Grays */
+    --gray-50: #f8fafc;
+    --gray-100: #f2f5f9;
+    --gray-200: #e3e8ef;
+    --gray-300: #cdd5e0;
+    --gray-400: #97a3b6;
+    --gray-500: #6d7a8f;
+    --gray-600: #475366;
+    --gray-700: #384352;
+    --gray-800: #252e3d;
+    --gray-900: #1b2133;
+  
+    --white: #ffffff;
+    --black: #0d121f;
+  
+    --background-1: var(--gray-200);
+    --background-2: var(--gray-100);
+    --background-3: var(--gray-50);
+    --background-4: var(--white);
+  
+    --border: var(--gray-300);
+    --details: var(--gray-400);
+    --lowest-contrast: var(--gray-400);
+    --low-contrast: var(--gray-500);
+    --high-contrast: var(--gray-700);
+  
+    --blue-background: var(--blue-100);
+    --blue-border: var(--blue-200);
+    --blue-primary: var(--blue-300);
+    --blue-hover: var(--blue-400);
+  
+    --red-background: var(--red-100);
+    --red-border: var(--red-200);
+    --red-primary: var(--red-300);
+    --red-hover: var(--red-400);
+  
+    --purple-background: var(--purple-100);
+    --purple-border: var(--purple-200);
+    --purple-primary: var(--purple-300);
+    --purple-hover: var(--purple-400);
+  
+    --green-background: var(--green-100);
+    --green-border: var(--green-200);
+    --green-primary: var(--green-300);
+    --green-hover: var(--green-400);
+  
+    --orange-background: var(--orange-100);
+    --orange-border: var(--orange-200);
+    --orange-primary: var(--orange-300);
+    --orange-hover: var(--orange-400);
+  
+    --yellow-background: var(--yellow-100);
+    --yellow-border: var(--yellow-200);
+    --yellow-primary: var(--yellow-300);
+    --yellow-hover: var(--yellow-400);
+  
+    --pink-background: var(--pink-100);
+    --pink-border: var(--pink-200);
+    --pink-primary: var(--pink-300);
+    --pink-hover: var(--pink-400);
+  
+    --gray-background: var(--gray-100);
+    --gray-border: var(--gray-200);
+    --gray-primary: var(--gray-300);
+    --gray-hover: var(--gray-400);
+  }
+  
+  html.dark:root {
+    --background-1: var(--black);
+    --background-2: var(--gray-900);
+    --background-3: var(--gray-800);
+    --background-4: var(--gray-700);
+  
+    --border: var(--gray-600);
+    --details: var(--gray-500);
+    --lowest-contrast: var(--gray-100);
+    --low-contrast: var(--gray-200);
+    --high-contrast: var(--white);
+  
+    --blue-background: var(--blue-500);
+    --blue-border: var(--blue-400);
+    --blue-primary: var(--blue-200);
+    --blue-hover: var(--blue-300);
+  
+    --red-background: var(--red-500);
+    --red-border: var(--red-400);
+    --red-primary: var(--red-200);
+    --red-hover: var(--red-300);
+  
+    --purple-background: var(--purple-500);
+    --purple-border: var(--purple-400);
+    --purple-primary: var(--purple-200);
+    --purple-hover: var(--purple-300);
+  
+    --green-background: var(--green-500);
+    --green-border: var(--green-400);
+    --green-primary: var(--green-200);
+    --green-hover: var(--green-300);
+  
+    --orange-background: var(--orange-500);
+    --orange-border: var(--orange-400);
+    --orange-primary: var(--orange-200);
+    --orange-hover: var(--orange-300);
+  
+    --yellow-background: var(--yellow-500);
+    --yellow-border: var(--yellow-400);
+    --yellow-primary: var(--yellow-200);
+    --yellow-hover: var(--yellow-300);
+  
+    --pink-background: var(--pink-500);
+    --pink-border: var(--pink-400);
+    --pink-primary: var(--pink-200);
+    --pink-hover: var(--pink-300);
+  
+    --gray-background: var(--gray-500);
+    --gray-border: var(--gray-400);
+    --gray-primary: var(--gray-200);
+    --gray-hover: var(--gray-300);
+  }
+  

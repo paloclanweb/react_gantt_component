@@ -1,85 +1,91 @@
-import React, { useMemo } from "react";
-import styles from "./task-list-table.module.css";
-import { Task } from "../../types/public-types";
+import React, { useMemo } from 'react'
+import tw, { css } from 'twin.macro'
 
-const localeDateStringCache = {};
+import { Task } from '../../types/public-types'
+
+const localeDateStringCache = {}
 const toLocaleDateStringFactory =
   (locale: string) =>
   (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
-    const key = date.toString();
-    let lds = localeDateStringCache[key];
+    const key = date.toString()
+    let lds = localeDateStringCache[key]
     if (!lds) {
-      lds = date.toLocaleDateString(locale, dateTimeOptions);
-      localeDateStringCache[key] = lds;
+      lds = date.toLocaleDateString(locale, dateTimeOptions)
+      localeDateStringCache[key] = lds
     }
-    return lds;
-  };
+    return lds
+  }
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
-  weekday: "short",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-};
+  weekday: 'short',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}
+
+const styles = {
+  taskListWrapper: tw`table pt-[0.15rem] border-l-[#e6e4e4] border-l-[solid] border-b-[#e6e4e4] border-b-[solid]`,
+  taskListTableRow: css`
+    ${tw`table-row text-ellipsis`};
+    &:nth-of-type(even) {
+      background-color: #fff;
+    }
+  `,
+  taskListCell: tw`table-cell overflow-hidden align-middle whitespace-nowrap text-ellipsis`,
+  taskListNameWrapper: tw`flex`,
+  taskListExpander: tw`text-[rgb(86_86_86)] text-[0.6rem] select-none cursor-pointer pt-[0.15rem] pb-0 px-[0.2rem]`,
+  taskListEmptyExpander: tw`text-[0.6rem] select-none pl-4`,
+}
 
 export const TaskListTableDefault: React.FC<{
-  rowHeight: number;
-  rowWidth: string;
-  fontFamily: string;
-  fontSize: string;
-  locale: string;
-  tasks: Task[];
-}> = ({
-  rowHeight,
-  rowWidth,
-  tasks,
-  fontFamily,
-  fontSize,
-  locale,
-}) => {
+  rowHeight: number
+  rowWidth: string
+  fontFamily: string
+  fontSize: string
+  locale: string
+  tasks: Task[]
+}> = ({ rowHeight, rowWidth, tasks, fontFamily, fontSize, locale }) => {
   const toLocaleDateString = useMemo(
     () => toLocaleDateStringFactory(locale),
-    [locale]
-  );
+    [locale],
+  )
 
   return (
     <div
-      className={styles.taskListWrapper}
+      css={[styles.taskListWrapper]}
       style={{
         fontFamily: fontFamily,
         fontSize: fontSize,
       }}
     >
       {tasks.map(t => {
-        let expanderSymbol = "";
+        let expanderSymbol = ''
         if (t.hideChildren === false) {
-          expanderSymbol = "▼";
+          expanderSymbol = '▼'
         } else if (t.hideChildren === true) {
-          expanderSymbol = "▶";
+          expanderSymbol = '▶'
         }
 
         return (
           <div
-            className={styles.taskListTableRow}
+            css={[styles.taskListTableRow]}
             style={{ height: rowHeight }}
             key={`${t.id}row`}
           >
             <div
-              className={styles.taskListCell}
+              css={[styles.taskListCell]}
               style={{
                 minWidth: rowWidth,
                 maxWidth: rowWidth,
               }}
               title={t.name}
             >
-              <div className={styles.taskListNameWrapper}>
-                <div>
-                  {expanderSymbol}
-                </div>
+              <div css={[styles.taskListNameWrapper]}>
+                <div>{expanderSymbol}</div>
                 <div>{t.name}</div>
               </div>
             </div>
             <div
-              className={styles.taskListCell}
+              css={[styles.taskListCell]}
               style={{
                 minWidth: rowWidth,
                 maxWidth: rowWidth,
@@ -88,7 +94,7 @@ export const TaskListTableDefault: React.FC<{
               &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
             </div>
             <div
-              className={styles.taskListCell}
+              css={[styles.taskListCell]}
               style={{
                 minWidth: rowWidth,
                 maxWidth: rowWidth,
@@ -97,8 +103,8 @@ export const TaskListTableDefault: React.FC<{
               &nbsp;{toLocaleDateString(t.end, dateTimeOptions)}
             </div>
           </div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}

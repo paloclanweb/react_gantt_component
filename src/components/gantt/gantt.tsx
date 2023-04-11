@@ -334,7 +334,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const styles = {
-    wrapper: tw`relative flex p-0 m-0`,
+    wrapper: tw`relative flex p-[7px] m-0`,
   }
 
   const tableProps: TaskListProps = {

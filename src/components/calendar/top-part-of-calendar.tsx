@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./calendar.module.css";
+import tw from "twin.macro";
 
 type TopPartOfCalendarProps = {
   value: string;
@@ -9,6 +9,11 @@ type TopPartOfCalendarProps = {
   xText: number;
   yText: number;
 };
+
+const styles = {
+  calendarTopTick: tw`stroke-white`,
+  calendarTopText: tw`pointer-events-none select-none fill-white`,
+}
 
 export const TopPartOfCalendar: React.FC<TopPartOfCalendarProps> = ({
   value,
@@ -25,14 +30,14 @@ export const TopPartOfCalendar: React.FC<TopPartOfCalendarProps> = ({
         y1={y1Line}
         x2={x1Line}
         y2={y2Line}
-        className={styles.calendarTopTick}
+        css={[styles.calendarTopTick]}
         key={value + "line"}
       />
       <text
         key={value + "text"}
         y={yText}
         x={xText}
-        className={styles.calendarTopText}
+        css={[styles.calendarTopText]}
       >
         {value}
       </text>

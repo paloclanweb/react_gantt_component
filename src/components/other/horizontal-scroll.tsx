@@ -1,6 +1,9 @@
 import React, { SyntheticEvent, useRef, useEffect } from "react";
-import styles from "./horizontal-scroll.module.css";
-
+import tw from "twin.macro";
+const styles = {
+  scrollWrapper: tw`overflow-auto max-w-full h-[1.2rem]`,
+  scroll: tw`h-px`,
+}
 export const HorizontalScroll: React.FC<{
   scroll: number;
   svgWidth: number;
@@ -24,11 +27,11 @@ export const HorizontalScroll: React.FC<{
           ? `0px ${taskListWidth}px 0px 0px`
           : `0px 0px 0px ${taskListWidth}px`,
       }}
-      className={styles.scrollWrapper}
+      css={[styles.scrollWrapper]}
       onScroll={onScroll}
       ref={scrollRef}
     >
-      <div style={{ width: svgWidth }} className={styles.scroll} />
+      <div style={{ width: svgWidth }} css={[styles.scroll]} />
     </div>
   );
 };
