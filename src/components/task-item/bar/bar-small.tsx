@@ -12,8 +12,6 @@ const styles = {
 
 export const BarSmall: React.FC<TaskItemProps> = ({
   task,
-  isProgressChangeable,
-  isDateChangeable,
 }) => {
   const progressPoint = getProgressPoint(
     task.progressWidth + task.x1,

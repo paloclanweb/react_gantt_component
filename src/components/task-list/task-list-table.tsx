@@ -7,13 +7,16 @@ const localeDateStringCache = {}
 const toLocaleDateStringFactory =
   (locale: string) =>
   (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
-    const key = date.toString()
-    let lds = localeDateStringCache[key]
-    if (!lds) {
-      lds = date.toLocaleDateString(locale, dateTimeOptions)
-      localeDateStringCache[key] = lds
+    if(date){
+      const key = date.toString()
+      let lds = localeDateStringCache[key]
+      if (!lds) {
+        lds = date.toLocaleDateString(locale, dateTimeOptions)
+        localeDateStringCache[key] = lds
+      }
+      return lds
     }
-    return lds
+    
   }
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
   weekday: 'short',

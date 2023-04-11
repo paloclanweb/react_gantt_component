@@ -10,8 +10,6 @@ export type TaskItemProps = {
   task: BarTask;
   arrowIndent: number;
   taskHeight: number;
-  isProgressChangeable: boolean;
-  isDateChangeable: boolean;
   isDelete: boolean;
   rtl: boolean;
 };

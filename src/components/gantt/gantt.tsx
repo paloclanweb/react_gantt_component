@@ -235,6 +235,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     ganttFullHeight,
   ]);
 
+
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
       setScrollY(event.currentTarget.scrollTop);
@@ -351,6 +352,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
+  
   return (
     <div>
       <div

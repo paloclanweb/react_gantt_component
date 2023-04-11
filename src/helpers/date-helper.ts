@@ -80,8 +80,8 @@ export const ganttDateRange = (
     if (task.start < newStartDate) {
       newStartDate = task.start;
     }
-    if (task.end > newEndDate) {
-      newEndDate = task.end;
+    if (task.end ?? new Date() > newEndDate) {
+      newEndDate = task.end ?? new Date();
     }
   }
   switch (viewMode) {
@@ -239,3 +239,18 @@ export const getWeekNumberISO8601 = (date: Date) => {
 export const getDaysInMonth = (month: number, year: number) => {
   return new Date(year, month + 1, 0).getDate();
 };
+export const latestStartDate =(tasks: Task[]) => {
+  return tasks.reduce((maxStartDate, task) => {
+    return task.start > maxStartDate ? task.start : maxStartDate;
+  }, new Date(0));
+} 
+export const assignEndDates = (tasks: Task[], latestStartDate: Date): Task[] => {
+  const tasksModified: Task[] = tasks.map((task: Task) => {
+    if (!task.end) {
+      task.end = latestStartDate;
+    }
+    return task; // Asegúrate de devolver el objeto 'task' aquí
+  });
+  return tasksModified;
+};
+
