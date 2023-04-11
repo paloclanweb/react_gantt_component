@@ -12,7 +12,7 @@ const App = () => {
 
   useEffect(() => {    
        const latestStart =  latestStartDate(tasks)
-       setTasks(assignEndDates(tasks, latestStart)) 
+       setTasks((prevTasks: Task[]) => assignEndDates(prevTasks, latestStart)) 
        setEndDatesAssigned(true);   
    
   }, [])

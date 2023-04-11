@@ -245,7 +245,7 @@ export const latestStartDate =(tasks: Task[]) => {
   }, new Date(0));
 } 
 export const assignEndDates = (tasks: Task[], latestStartDate: Date): Task[] => {
-  const tasksModified: Task[] = tasks.map((task: Task) => {
+  const tasksModified: Task[] = tasks.map(({...task}) => {
     if (!task.end) {
       task.end = latestStartDate;
     }
