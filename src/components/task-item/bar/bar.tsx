@@ -1,8 +1,6 @@
 import React from "react";
 import { getProgressPoint } from "../../../helpers/bar-helper";
 import { BarDisplay } from "./bar-display";
-import { BarDateHandle } from "./bar-date-handle";
-import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
 import tw, { css } from 'twin.macro'
 const styles = {
