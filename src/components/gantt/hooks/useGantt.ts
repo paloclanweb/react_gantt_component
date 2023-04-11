@@ -7,14 +7,12 @@ import { convertToBarTasks } from '../../../helpers/bar-helper';
 
 export const useGantt = ({
     tasks,
-    headerHeight = 50,
     columnWidth = 60,
     listCellWidth = "155px",
     rowHeight = 50,
     ganttHeight = 0,
     viewMode = ViewMode.Day,
     preStepsCount = 1,
-    locale = "en-GB",
     barFill = 60,
     barCornerRadius = 3,
     barProgressColor = "#a3a3ff",
@@ -99,7 +97,7 @@ export const useGantt = ({
         )
       );
     }, [
-      tasks, viewMode, preStepsCount
+      tasks, preStepsCount
     ]);
   
     useEffect(() => {
