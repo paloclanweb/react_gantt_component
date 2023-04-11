@@ -1,5 +1,5 @@
 import React from "react";
-import style from "./bar.module.css";
+import tw from "twin.macro";
 
 type BarDisplayProps = {
   x: number;
@@ -18,6 +18,9 @@ type BarDisplayProps = {
   };
   
 };
+const stylesTwin = {
+  barBackground: tw`select-none stroke-0`,
+}
 export const BarDisplay: React.FC<BarDisplayProps> = ({
   x,
   y,
@@ -46,7 +49,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         ry={barCornerRadius}
         rx={barCornerRadius}
         fill={getBarColor()}
-        className={style.barBackground}
+        css={[stylesTwin.barBackground]}
       />
       <rect
         x={progressX}

@@ -1,6 +1,13 @@
 import React from "react";
 import { TaskItemProps } from "../task-item";
-import styles from "./milestone.module.css";
+import tw, {css} from "twin.macro";
+
+
+const styles = {
+  milestoneWrapper: css`${tw`cursor-pointer`}
+  outline: none;`,
+  milestoneBackground: tw`select-none`,
+}
 
 export const Milestone: React.FC<TaskItemProps> = ({
   task,
@@ -13,7 +20,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
   };
 
   return (
-    <g tabIndex={0} className={styles.milestoneWrapper}>
+    <g tabIndex={0} css={[styles.milestoneWrapper]}>
       <rect
         fill={getBarColor()}
         x={task.x1}
@@ -23,7 +30,7 @@ export const Milestone: React.FC<TaskItemProps> = ({
         rx={task.barCornerRadius}
         ry={task.barCornerRadius}
         transform={transform}
-        className={styles.milestoneBackground}
+        css={[styles.milestoneBackground]}
       />
     </g>
   );

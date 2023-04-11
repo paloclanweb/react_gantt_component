@@ -1,10 +1,14 @@
 import React from "react";
 import { getProgressPoint } from "../../../helpers/bar-helper";
 import { BarDisplay } from "./bar-display";
-import { BarDateHandle } from "./bar-date-handle";
-import { BarProgressHandle } from "./bar-progress-handle";
 import { TaskItemProps } from "../task-item";
-import styles from "./bar.module.css";
+import tw, { css } from 'twin.macro'
+const styles = {
+  barWrapper: css`
+    ${tw`cursor-pointer`} hover:visible hover:opacity-100;
+    outline: none;
+  `,
+}
 
 export const Bar: React.FC<TaskItemProps> = ({
   task,
@@ -19,7 +23,7 @@ export const Bar: React.FC<TaskItemProps> = ({
   );
   const handleHeight = task.height - 2;
   return (
-    <g className={styles.barWrapper} tabIndex={0}>
+    <g css={[styles.barWrapper]} tabIndex={0}>
       <BarDisplay
         x={task.x1}
         y={task.y}
