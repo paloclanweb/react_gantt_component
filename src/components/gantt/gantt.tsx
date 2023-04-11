@@ -1,13 +1,6 @@
-import React, {
-  useState,
-  SyntheticEvent,
-  useRef,
-  useEffect,
-  useMemo,
-} from "react";
+import React from "react";
 import { ViewMode, GanttProps, Task } from "../../types/public-types";
 import { GridProps } from "../grid/grid";
-import { ganttDateRange, seedDates } from "../../helpers/date-helper";
 import { CalendarProps } from "../calendar/calendar";
 import { TaskGanttContentProps } from "./task-gantt-content";
 import { TaskListHeaderDefault } from "../task-list/task-list-header";
@@ -15,10 +8,8 @@ import { TaskListTableDefault } from "../task-list/task-list-table";
 import { VerticalScroll } from "../other/vertical-scroll";
 import { TaskListProps, TaskList } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
-import { BarTask } from "../../types/bar-task";
-import { convertToBarTasks } from "../../helpers/bar-helper";
-import { DateSetup } from "../../types/date-setup";
 import { HorizontalScroll } from "../other/horizontal-scroll";
+import { useGantt } from './useGantt';
 import tw from "twin.macro";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
@@ -55,235 +46,44 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault
 }) => {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const taskListRef = useRef<HTMLDivElement>(null);
-  const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-    const [startDate, endDate] = ganttDateRange(tasks, viewMode, preStepsCount);
-    return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
-  });
-  const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
-    undefined
-  );
-
-  const [taskListWidth, setTaskListWidth] = useState(0);
-  const [barTasks, setBarTasks] = useState<BarTask[]>([]);
-  const taskHeight = useMemo(
-    () => (rowHeight * barFill) / 100,
-    [rowHeight, barFill]
-  );
-
-  
-  const [failedTask, setFailedTask] = useState<BarTask | null>(null);
-
-  const svgWidth = dateSetup.dates.length * columnWidth;
-  const ganttFullHeight = barTasks.length * rowHeight;
-
-  const [scrollY, setScrollY] = useState(0);
-  const [scrollX, setScrollX] = useState(-1);
-  const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
-
-  // task change events
-  useEffect(() => {
-    let filteredTasks: Task[];
-    filteredTasks = tasks;
-    const [startDate, endDate] = ganttDateRange(
-      filteredTasks,
-      viewMode,
-      preStepsCount
-    );
-    let newDates = seedDates(startDate, endDate, viewMode);
-    if (rtl) {
-      newDates = newDates.reverse();
-      if (scrollX === -1) {
-        setScrollX(newDates.length * columnWidth);
-      }
-    }
-    setDateSetup({ dates: newDates, viewMode });
-    setBarTasks(
-      convertToBarTasks(
-        filteredTasks,
-        newDates,
-        columnWidth,
-        rowHeight,
-        taskHeight,
-        barCornerRadius,
-        handleWidth,
-        rtl,
-        barProgressColor,
-        barProgressSelectedColor,
-        barBackgroundColor,
-        barBackgroundSelectedColor,
-        projectProgressColor,
-        projectProgressSelectedColor,
-        projectBackgroundColor,
-        projectBackgroundSelectedColor,
-        milestoneBackgroundColor,
-        milestoneBackgroundSelectedColor
-      )
-    );
-  }, [
-    tasks, viewMode, preStepsCount
-  ]);
-
-  useEffect(() => {
-    if (
-      viewMode === dateSetup.viewMode &&
-      ((viewDate && !currentViewDate) ||
-        (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
-    ) {
-      const dates = dateSetup.dates;
-      const index = dates.findIndex(
-        (d, i) =>
-          viewDate.valueOf() >= d.valueOf() &&
-          i + 1 !== dates.length &&
-          viewDate.valueOf() < dates[i + 1].valueOf()
-      );
-      if (index === -1) {
-        return;
-      }
-      setCurrentViewDate(viewDate);
-      setScrollX(columnWidth * index);
-    }
-  }, [
-    viewDate,
-    columnWidth,
-    dateSetup.dates,
-    dateSetup.viewMode,
-    viewMode,
-    currentViewDate,
-    setCurrentViewDate,
-  ]);
-  
-  useEffect(() => {
-    if (failedTask) {
-      setBarTasks(barTasks.map(t => (t.id !== failedTask.id ? t : failedTask)));
-      setFailedTask(null);
-    }
-  }, [failedTask, barTasks]);
-
-  useEffect(() => {
-    if (!listCellWidth) {
-      setTaskListWidth(0);
-    }
-    if (taskListRef.current) {
-      setTaskListWidth(taskListRef.current.offsetWidth);
-    }
-  }, [taskListRef, listCellWidth]);  
-
-  // scroll events
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      if (event.shiftKey || event.deltaX) {
-        const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
-        let newScrollX = scrollX + scrollMove;
-        if (newScrollX < 0) {
-          newScrollX = 0;
-        } else if (newScrollX > svgWidth) {
-          newScrollX = svgWidth;
-        }
-        setScrollX(newScrollX);
-        event.preventDefault();
-      } else if (ganttHeight) {
-        let newScrollY = scrollY + event.deltaY;
-        if (newScrollY < 0) {
-          newScrollY = 0;
-        } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
-        }
-        if (newScrollY !== scrollY) {
-          setScrollY(newScrollY);
-          event.preventDefault();
-        }
-      }
-
-      setIgnoreScrollEvent(true);
-    };
-
-    // subscribe if scroll is necessary
-    wrapperRef.current?.addEventListener("wheel", handleWheel, {
-      passive: false,
-    });
-    return () => {
-      wrapperRef.current?.removeEventListener("wheel", handleWheel);
-    };
-  }, [
+  const {
     wrapperRef,
+    taskListRef,
+    dateSetup,
+    taskListWidth,
+    barTasks,
+    taskHeight,
+    ganttFullHeight,
     scrollY,
     scrollX,
-    ganttHeight,
-    svgWidth,
+    handleScrollY,
+    handleScrollX,
+    handleKeyDown,
+    svgWidth
+  } = useGantt({
+    tasks,
+    viewMode,
+    preStepsCount,
+    rowHeight,
+    barFill,
+    columnWidth,
+    barCornerRadius,
+    handleWidth,
     rtl,
-    ganttFullHeight,
-  ]);
-
-
-  const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
-      setScrollY(event.currentTarget.scrollTop);
-      setIgnoreScrollEvent(true);
-    } else {
-      setIgnoreScrollEvent(false);
-    }
-  };
-
-  const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
-    if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
-      setScrollX(event.currentTarget.scrollLeft);
-      setIgnoreScrollEvent(true);
-    } else {
-      setIgnoreScrollEvent(false);
-    }
-  };
-
-  /**
-   * Handles arrow keys events and transform it to new scroll
-   */
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    let newScrollY = scrollY;
-    let newScrollX = scrollX;
-    let isX = true;
-    switch (event.key) {
-      case "Down": // IE/Edge specific value
-      case "ArrowDown":
-        newScrollY += rowHeight;
-        isX = false;
-        break;
-      case "Up": // IE/Edge specific value
-      case "ArrowUp":
-        newScrollY -= rowHeight;
-        isX = false;
-        break;
-      case "Left":
-      case "ArrowLeft":
-        newScrollX -= columnWidth;
-        break;
-      case "Right": // IE/Edge specific value
-      case "ArrowRight":
-        newScrollX += columnWidth;
-        break;
-    }
-    if (isX) {
-      if (newScrollX < 0) {
-        newScrollX = 0;
-      } else if (newScrollX > svgWidth) {
-        newScrollX = svgWidth;
-      }
-      setScrollX(newScrollX);
-    } else {
-      if (newScrollY < 0) {
-        newScrollY = 0;
-      } else if (newScrollY > ganttFullHeight - ganttHeight) {
-        newScrollY = ganttFullHeight - ganttHeight;
-      }
-      setScrollY(newScrollY);
-    }
-    setIgnoreScrollEvent(true);
-  };
-
-  /**
-   * Task select event
-   */
+    barProgressColor,
+    barProgressSelectedColor,
+    barBackgroundColor,
+    barBackgroundSelectedColor,
+    projectProgressColor,
+    projectProgressSelectedColor,
+    projectBackgroundColor,
+    projectBackgroundSelectedColor,
+    milestoneBackgroundColor,
+    milestoneBackgroundSelectedColor,
+    ganttHeight,
+    listCellWidth,
+    viewDate,
+  });
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -293,6 +93,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     todayColor,
     rtl,
   };
+
   const calendarProps: CalendarProps = {
     dateSetup,
     locale,
@@ -303,6 +104,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontSize,
     rtl,
   };
+
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,
     rowHeight,
