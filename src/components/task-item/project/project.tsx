@@ -1,6 +1,14 @@
 import React from "react";
 import { TaskItemProps } from "../task-item";
-import styles from "./project.module.css";
+import tw, {css} from "twin.macro";
+
+const styles = {
+  projectWrapper: css`${tw`cursor-pointer`} outline: none;`,
+  projectBackground: tw`select-none opacity-60`,
+  projectTop: tw`select-none`,
+}
+
+
 
 export const Project: React.FC<TaskItemProps> = ({ task }) => {
   const barColor = task.styles.backgroundColor;
@@ -25,7 +33,7 @@ export const Project: React.FC<TaskItemProps> = ({ task }) => {
   ].join(",");
 
   return (
-    <g tabIndex={0} className={styles.projectWrapper}>
+    <g tabIndex={0} css={[styles.projectWrapper]}>
       <rect
         fill={barColor}
         x={task.x1}
@@ -34,7 +42,7 @@ export const Project: React.FC<TaskItemProps> = ({ task }) => {
         height={task.height}
         rx={task.barCornerRadius}
         ry={task.barCornerRadius}
-        className={styles.projectBackground}
+        css={[styles.projectBackground]}
       />
       <rect
         x={task.progressX}
@@ -53,15 +61,15 @@ export const Project: React.FC<TaskItemProps> = ({ task }) => {
         height={task.height / 2}
         rx={task.barCornerRadius}
         ry={task.barCornerRadius}
-        className={styles.projectTop}
+        css={[styles.projectTop]}
       />
       <polygon
-        className={styles.projectTop}
+        css={[styles.projectTop]}
         points={projectLeftTriangle}
         fill={barColor}
       />
       <polygon
-        className={styles.projectTop}
+        css={[styles.projectTop]}
         points={projectRightTriangle}
         fill={barColor}
       />

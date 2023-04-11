@@ -1,9 +1,15 @@
-import React from "react";
-import { getProgressPoint } from "../../../helpers/bar-helper";
-import { BarDisplay } from "./bar-display";
-import { BarProgressHandle } from "./bar-progress-handle";
-import { TaskItemProps } from "../task-item";
-import styles from "./bar.module.css";
+import React from 'react'
+import { getProgressPoint } from '../../../helpers/bar-helper'
+import { BarDisplay } from './bar-display'
+import { BarProgressHandle } from './bar-progress-handle'
+import { TaskItemProps } from '../task-item'
+import tw, { css } from 'twin.macro'
+const styles = {
+  barWrapper: css`
+    ${tw`cursor-pointer`} hover:visible hover:opacity-100;
+    outline: none;
+  `,
+}
 
 export const BarSmall: React.FC<TaskItemProps> = ({
   task,
@@ -13,10 +19,10 @@ export const BarSmall: React.FC<TaskItemProps> = ({
   const progressPoint = getProgressPoint(
     task.progressWidth + task.x1,
     task.y,
-    task.height
-  );
+    task.height,
+  )
   return (
-    <g className={styles.barWrapper} tabIndex={0}>
+    <g css={[styles.barWrapper]} tabIndex={0}>
       <BarDisplay
         x={task.x1}
         y={task.y}
@@ -27,7 +33,6 @@ export const BarSmall: React.FC<TaskItemProps> = ({
         barCornerRadius={task.barCornerRadius}
         styles={task.styles}
       />
-     
     </g>
-  );
-};
+  )
+}
