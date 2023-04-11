@@ -135,7 +135,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
-  
   return (
     <div>
       <div
