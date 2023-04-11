@@ -9,7 +9,7 @@ import { VerticalScroll } from "../other/vertical-scroll";
 import { TaskListProps, TaskList } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { HorizontalScroll } from "../other/horizontal-scroll";
-import { useGantt } from './useGantt';
+import { useGantt } from './hooks/useGantt';
 import tw from "twin.macro";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({

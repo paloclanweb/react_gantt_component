@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useMemo, SyntheticEvent } from 'react';
-import { ViewMode, GanttProps, Task } from "../../types/public-types";
-import { DateSetup } from '../../types/date-setup';
-import { ganttDateRange, seedDates } from '../../helpers/date-helper';
-import { BarTask } from '../../types/bar-task';
-import { convertToBarTasks } from '../../helpers/bar-helper';
+import { ViewMode, GanttProps, Task } from "../../../types/public-types";
+import { DateSetup } from '../../../types/date-setup';
+import { ganttDateRange, seedDates } from '../../../helpers/date-helper';
+import { BarTask } from '../../../types/bar-task';
+import { convertToBarTasks } from '../../../helpers/bar-helper';
 
 export const useGantt = ({
     tasks,
