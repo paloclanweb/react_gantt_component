@@ -3,7 +3,7 @@ import tw, { css } from 'twin.macro'
 
 import { Task } from '../../types/public-types'
 
-const localeDateStringCache = {}
+const localeDateStringCache: { [key: string]: string } = {}
 const toLocaleDateStringFactory =
   (locale: string) =>
   (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
