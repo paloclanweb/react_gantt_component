@@ -8,14 +8,17 @@ import tw from "twin.macro";
 
 // UI
 import Search from '../ui/Search'
+import DateInput from '../ui/DateInput'
 
 const styles = {
-  container: tw`p-1`,
+  container: tw`p-1 flex gap-1`,
 }
 
 //types
 interface FormState {
   search: string;
+  from: string;
+  to: string;
 }
 
 const Filter = () => {
@@ -24,6 +27,8 @@ const Filter = () => {
 
   const [form, setForm] = useState<FormState>({
     search: "",
+    from: "",
+    to: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,17 +45,37 @@ const Filter = () => {
     () => tasks.filter((task) => {
       const name = task.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Normalizar y eliminar acentos
       const search = form.search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase(); // Normalizar, eliminar acentos y convertir a minúsculas
+      
+      if(form.from !== "" && form.to !== ""){
+        const fromDate = new Date(form.from);
+        fromDate.setHours(0);
+        fromDate.setMinutes(0);
+        fromDate.setSeconds(0);
+        fromDate.setMilliseconds(0);
+
+        const toDate = new Date(form.to);
+        toDate.setHours(0);
+        toDate.setMinutes(0);
+        toDate.setSeconds(0);
+        toDate.setMilliseconds(0);
+
+        const itemDate = new Date(task.start);
+
+        return itemDate >= fromDate && itemDate <= toDate && name.toLocaleLowerCase().includes(search)
+      }
+      
       return name.toLocaleLowerCase().includes(search);
     }),
     [form]
   );
 
 
-
   return (
     <div className="Wrapper">
       <section css={[styles.container]}>
         <Search search={form.search} handleChange={handleChange} />
+        <DateInput name="from" dateText={form.from} handleChange={handleChange} />
+        <DateInput name="to" dateText={form.to} handleChange={handleChange} />
       </section>
       {
         filterTasks.length > 0 &&
