@@ -1,79 +1,84 @@
-import { useState, useEffect, useRef, useMemo, SyntheticEvent } from 'react';
-import { ViewMode, GanttProps, Task } from "../../../types/public-types";
-import { DateSetup } from '../../../types/date-setup';
-import { ganttDateRange, seedDates } from '../../../helpers/date-helper';
-import { BarTask } from '../../../types/bar-task';
-import { convertToBarTasks } from '../../../helpers/bar-helper';
+import { useState, useEffect, useRef, useMemo, SyntheticEvent } from 'react'
+import { ViewMode, GanttProps, Task } from '../../../types/public-types'
+import { DateSetup } from '../../../types/date-setup'
+import { ganttDateRange, seedDates } from '../../../helpers/date-helper'
+import { BarTask } from '../../../types/bar-task'
+import { convertToBarTasks } from '../../../helpers/bar-helper'
 
 export const useGantt = ({
-    tasks,
-    columnWidth = 60,
-    listCellWidth = "155px",
-    rowHeight = 50,
-    ganttHeight = 0,
-    viewMode = ViewMode.Day,
-    preStepsCount = 1,
-    barFill = 60,
-    barCornerRadius = 3,
-    barProgressColor = "#a3a3ff",
-    barProgressSelectedColor = "#8282f5",
-    barBackgroundColor = "#b8c2cc",
-    barBackgroundSelectedColor = "#aeb8c2",
-    projectProgressColor = "#7db59a",
-    projectProgressSelectedColor = "#59a985",
-    projectBackgroundColor = "#fac465",
-    projectBackgroundSelectedColor = "#f7bb53",
-    milestoneBackgroundColor = "#f1c453",
-    milestoneBackgroundSelectedColor = "#f29e4c",
-    rtl = false,
-    handleWidth = 8,
-    viewDate,
-}:GanttProps) => {
-  
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const taskListRef = useRef<HTMLDivElement>(null);
-    const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
-      const [startDate, endDate] = ganttDateRange(tasks, viewMode, preStepsCount);
-      return { viewMode, dates: seedDates(startDate, endDate, viewMode) };
-    });
-    const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
-      undefined
-    );
-  
-    const [taskListWidth, setTaskListWidth] = useState(0);
-    const [barTasks, setBarTasks] = useState<BarTask[]>([]);
-    const taskHeight = useMemo(
-      () => (rowHeight * barFill) / 100,
-      [rowHeight, barFill]
-    );
-  
-    
-    const [failedTask, setFailedTask] = useState<BarTask | null>(null);
-  
-    const svgWidth = dateSetup.dates.length * columnWidth;
-    const ganttFullHeight = barTasks.length * rowHeight;
-  
-    const [scrollY, setScrollY] = useState(0);
-    const [scrollX, setScrollX] = useState(-1);
-    const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
-  
-    // task change events
-    useEffect(() => {
-      let filteredTasks: Task[];
-      filteredTasks = tasks;
+  tasks,
+  columnWidth = 60,
+  listCellWidth = '155px',
+  rowHeight = 50,
+  ganttHeight = 0,
+  viewMode = ViewMode.Day,
+  preStepsCount = 1,
+  barFill = 60,
+  barCornerRadius = 3,
+  barProgressColor = '#a3a3ff',
+  barProgressSelectedColor = '#8282f5',
+  barBackgroundColor = '#b8c2cc',
+  barBackgroundSelectedColor = '#aeb8c2',
+  projectProgressColor = '#7db59a',
+  projectProgressSelectedColor = '#59a985',
+  projectBackgroundColor = '#fac465',
+  projectBackgroundSelectedColor = '#f7bb53',
+  milestoneBackgroundColor = '#f1c453',
+  milestoneBackgroundSelectedColor = '#f29e4c',
+  rtl = false,
+  handleWidth = 8,
+  viewDate,
+}: GanttProps) => {
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const taskListRef = useRef<HTMLDivElement>(null)
+  const [dateSetup, setDateSetup] = useState<DateSetup>(() => {
+    if (tasks.length === 0) {
+      return {
+        viewMode,
+        dates: [],
+      }
+    }
+    const [startDate, endDate] = ganttDateRange(tasks, viewMode, preStepsCount)
+    return { viewMode, dates: seedDates(startDate, endDate, viewMode) }
+  })
+  const [currentViewDate, setCurrentViewDate] = useState<Date | undefined>(
+    undefined,
+  )
+
+  const [taskListWidth, setTaskListWidth] = useState(0)
+  const [barTasks, setBarTasks] = useState<BarTask[]>([])
+  const taskHeight = useMemo(
+    () => (rowHeight * barFill) / 100,
+    [rowHeight, barFill],
+  )
+
+  const [failedTask, setFailedTask] = useState<BarTask | null>(null)
+
+  const svgWidth = dateSetup.dates.length * columnWidth
+  const ganttFullHeight = barTasks.length * rowHeight
+
+  const [scrollY, setScrollY] = useState(0)
+  const [scrollX, setScrollX] = useState(-1)
+  const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false)
+
+  // task change events
+  useEffect(() => {
+    let filteredTasks: Task[]
+    filteredTasks = tasks
+    if (filteredTasks.length > 0) {
       const [startDate, endDate] = ganttDateRange(
         filteredTasks,
         viewMode,
-        preStepsCount
-      );
-      let newDates = seedDates(startDate, endDate, viewMode);
+        preStepsCount,
+      )
+      let newDates = seedDates(startDate, endDate, viewMode)
       if (rtl) {
-        newDates = newDates.reverse();
+        newDates = newDates.reverse()
         if (scrollX === -1) {
-          setScrollX(newDates.length * columnWidth);
+          setScrollX(newDates.length * columnWidth)
         }
       }
-      setDateSetup({ dates: newDates, viewMode });
+      setDateSetup({ dates: newDates, viewMode })
       setBarTasks(
         convertToBarTasks(
           filteredTasks,
@@ -93,164 +98,162 @@ export const useGantt = ({
           projectBackgroundColor,
           projectBackgroundSelectedColor,
           milestoneBackgroundColor,
-          milestoneBackgroundSelectedColor
-        )
-      );
-    }, [
-      tasks, preStepsCount
-    ]);
-  
-    useEffect(() => {
-      if (
-        viewMode === dateSetup.viewMode &&
-        ((viewDate && !currentViewDate) ||
-          (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
-      ) {
-        const dates = dateSetup.dates;
-        const index = dates.findIndex(
-          (d, i) =>
-            viewDate.valueOf() >= d.valueOf() &&
-            i + 1 !== dates.length &&
-            viewDate.valueOf() < dates[i + 1].valueOf()
-        );
-        if (index === -1) {
-          return;
-        }
-        setCurrentViewDate(viewDate);
-        setScrollX(columnWidth * index);
+          milestoneBackgroundSelectedColor,
+        ),
+      )
+    }
+  }, [tasks, preStepsCount])
+
+  useEffect(() => {
+    if (
+      viewMode === dateSetup.viewMode &&
+      ((viewDate && !currentViewDate) ||
+        (viewDate && currentViewDate?.valueOf() !== viewDate.valueOf()))
+    ) {
+      const dates = dateSetup.dates
+      const index = dates.findIndex(
+        (d, i) =>
+          viewDate.valueOf() >= d.valueOf() &&
+          i + 1 !== dates.length &&
+          viewDate.valueOf() < dates[i + 1].valueOf(),
+      )
+      if (index === -1) {
+        return
       }
-    }, [
-      viewDate,
-      columnWidth,
-      dateSetup.dates,
-      dateSetup.viewMode,
-      viewMode,
-      currentViewDate,
-      setCurrentViewDate,
-    ]);
-    
-    useEffect(() => {
-      if (failedTask) {
-        setBarTasks(barTasks.map(t => (t.id !== failedTask.id ? t : failedTask)));
-        setFailedTask(null);
-      }
-    }, [failedTask, barTasks]);
-  
-    useEffect(() => {
-      if (!listCellWidth) {
-        setTaskListWidth(0);
-      }
-      if (taskListRef.current) {
-        setTaskListWidth(taskListRef.current.offsetWidth);
-      }
-    }, [taskListRef, listCellWidth]);  
-  
-    // scroll events
-    useEffect(() => {
-      const handleWheel = (event: WheelEvent) => {
-        if (event.shiftKey || event.deltaX) {
-          const scrollMove = event.deltaX ? event.deltaX : event.deltaY;
-          let newScrollX = scrollX + scrollMove;
-          if (newScrollX < 0) {
-            newScrollX = 0;
-          } else if (newScrollX > svgWidth) {
-            newScrollX = svgWidth;
-          }
-          setScrollX(newScrollX);
-          event.preventDefault();
-        } else if (ganttHeight) {
-          let newScrollY = scrollY + event.deltaY;
-          if (newScrollY < 0) {
-            newScrollY = 0;
-          } else if (newScrollY > ganttFullHeight - ganttHeight) {
-            newScrollY = ganttFullHeight - ganttHeight;
-          }
-          if (newScrollY !== scrollY) {
-            setScrollY(newScrollY);
-            event.preventDefault();
-          }
-        }
-  
-        setIgnoreScrollEvent(true);
-      };
-  
-      // subscribe if scroll is necessary
-      wrapperRef.current?.addEventListener("wheel", handleWheel, {
-        passive: false,
-      });
-      return () => {
-        wrapperRef.current?.removeEventListener("wheel", handleWheel);
-      };
-    }, [
-      wrapperRef,
-      scrollY,
-      scrollX,
-      ganttHeight,
-      svgWidth,
-      rtl,
-      ganttFullHeight,
-    ]);
-  
-    const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
-      if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
-        setScrollY(event.currentTarget.scrollTop);
-        setIgnoreScrollEvent(true);
-      } else {
-        setIgnoreScrollEvent(false);
-      }
-    };
-  
-    const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
-      if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
-        setScrollX(event.currentTarget.scrollLeft);
-        setIgnoreScrollEvent(true);
-      } else {
-        setIgnoreScrollEvent(false);
-      }
-    };
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      let newScrollY = scrollY;
-      let newScrollX = scrollX;
-      let isX = true;
-      switch (event.key) {
-        case "Down": // IE/Edge specific value
-        case "ArrowDown":
-          newScrollY += rowHeight;
-          isX = false;
-          break;
-        case "Up": // IE/Edge specific value
-        case "ArrowUp":
-          newScrollY -= rowHeight;
-          isX = false;
-          break;
-        case "Left":
-        case "ArrowLeft":
-          newScrollX -= columnWidth;
-          break;
-        case "Right": // IE/Edge specific value
-        case "ArrowRight":
-          newScrollX += columnWidth;
-          break;
-      }
-      if (isX) {
+      setCurrentViewDate(viewDate)
+      setScrollX(columnWidth * index)
+    }
+  }, [
+    viewDate,
+    columnWidth,
+    dateSetup.dates,
+    dateSetup.viewMode,
+    viewMode,
+    currentViewDate,
+    setCurrentViewDate,
+  ])
+
+  useEffect(() => {
+    if (failedTask) {
+      setBarTasks(barTasks.map(t => (t.id !== failedTask.id ? t : failedTask)))
+      setFailedTask(null)
+    }
+  }, [failedTask, barTasks])
+
+  useEffect(() => {
+    if (!listCellWidth) {
+      setTaskListWidth(0)
+    }
+    if (taskListRef.current) {
+      setTaskListWidth(taskListRef.current.offsetWidth)
+    }
+  }, [taskListRef, listCellWidth])
+
+  // scroll events
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      if (event.shiftKey || event.deltaX) {
+        const scrollMove = event.deltaX ? event.deltaX : event.deltaY
+        let newScrollX = scrollX + scrollMove
         if (newScrollX < 0) {
-          newScrollX = 0;
+          newScrollX = 0
         } else if (newScrollX > svgWidth) {
-          newScrollX = svgWidth;
+          newScrollX = svgWidth
         }
-        setScrollX(newScrollX);
-      } else {
+        setScrollX(newScrollX)
+        event.preventDefault()
+      } else if (ganttHeight) {
+        let newScrollY = scrollY + event.deltaY
         if (newScrollY < 0) {
-          newScrollY = 0;
+          newScrollY = 0
         } else if (newScrollY > ganttFullHeight - ganttHeight) {
-          newScrollY = ganttFullHeight - ganttHeight;
+          newScrollY = ganttFullHeight - ganttHeight
         }
-        setScrollY(newScrollY);
+        if (newScrollY !== scrollY) {
+          setScrollY(newScrollY)
+          event.preventDefault()
+        }
       }
-      setIgnoreScrollEvent(true);
-    };
-  
+
+      setIgnoreScrollEvent(true)
+    }
+
+    // subscribe if scroll is necessary
+    wrapperRef.current?.addEventListener('wheel', handleWheel, {
+      passive: false,
+    })
+    return () => {
+      wrapperRef.current?.removeEventListener('wheel', handleWheel)
+    }
+  }, [
+    wrapperRef,
+    scrollY,
+    scrollX,
+    ganttHeight,
+    svgWidth,
+    rtl,
+    ganttFullHeight,
+  ])
+
+  const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
+    if (scrollY !== event.currentTarget.scrollTop && !ignoreScrollEvent) {
+      setScrollY(event.currentTarget.scrollTop)
+      setIgnoreScrollEvent(true)
+    } else {
+      setIgnoreScrollEvent(false)
+    }
+  }
+
+  const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
+    if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {
+      setScrollX(event.currentTarget.scrollLeft)
+      setIgnoreScrollEvent(true)
+    } else {
+      setIgnoreScrollEvent(false)
+    }
+  }
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    let newScrollY = scrollY
+    let newScrollX = scrollX
+    let isX = true
+    switch (event.key) {
+      case 'Down': // IE/Edge specific value
+      case 'ArrowDown':
+        newScrollY += rowHeight
+        isX = false
+        break
+      case 'Up': // IE/Edge specific value
+      case 'ArrowUp':
+        newScrollY -= rowHeight
+        isX = false
+        break
+      case 'Left':
+      case 'ArrowLeft':
+        newScrollX -= columnWidth
+        break
+      case 'Right': // IE/Edge specific value
+      case 'ArrowRight':
+        newScrollX += columnWidth
+        break
+    }
+    if (isX) {
+      if (newScrollX < 0) {
+        newScrollX = 0
+      } else if (newScrollX > svgWidth) {
+        newScrollX = svgWidth
+      }
+      setScrollX(newScrollX)
+    } else {
+      if (newScrollY < 0) {
+        newScrollY = 0
+      } else if (newScrollY > ganttFullHeight - ganttHeight) {
+        newScrollY = ganttFullHeight - ganttHeight
+      }
+      setScrollY(newScrollY)
+    }
+    setIgnoreScrollEvent(true)
+  }
 
   return {
     wrapperRef,
@@ -268,6 +271,6 @@ export const useGantt = ({
     handleScrollY,
     handleScrollX,
     handleKeyDown,
-    svgWidth
-  };
-};
+    svgWidth,
+  }
+}
