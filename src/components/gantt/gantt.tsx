@@ -10,7 +10,7 @@ import { TaskListProps, TaskList } from "../task-list/task-list";
 import { TaskGantt } from "./task-gantt";
 import { HorizontalScroll } from "../other/horizontal-scroll";
 import { useGantt } from './hooks/useGantt';
-import tw from "twin.macro";
+import tw, {css} from "twin.macro";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
@@ -118,7 +118,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   };
 
   const styles = {
-    wrapper: tw`relative flex p-[7px] m-0`,
+    wrapper: css`${tw`relative flex p-[7px] m-0`};list-style: none;
+    outline: none;`,
   }
 
   const tableProps: TaskListProps = {

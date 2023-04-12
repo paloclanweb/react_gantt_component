@@ -4,7 +4,7 @@ import { Bar } from "./bar/bar";
 import { BarSmall } from "./bar/bar-small";
 import { Milestone } from "./milestone/milestone";
 import { Project } from "./project/project";
-import style from "./task-list.module.css";
+import tw, {css} from "twin.macro";
 
 export type TaskItemProps = {
   task: BarTask;
@@ -13,6 +13,24 @@ export type TaskItemProps = {
   isDelete: boolean;
   rtl: boolean;
 };
+
+
+
+const styles = {
+  barLabel: css`${tw`fill-white font-[lighter] select-none pointer-events-none`}
+  text-anchor: middle;
+  dominant-baseline: central;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;`,
+  barLabelOutside: css`${tw`fill-[#555] select-none pointer-events-none`} text-anchor: start;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;`
+}
+
 
 export const TaskItem: React.FC<TaskItemProps> = props => {
   const {
@@ -75,10 +93,10 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       <text
         x={getX()}
         y={task.y + taskHeight * 0.5}
-        className={
+        css={
           isTextInside
-            ? style.barLabel
-            : style.barLabel && style.barLabelOutside
+            ? styles.barLabel
+            : styles.barLabel && styles.barLabelOutside
         }
         ref={textRef}
       >
