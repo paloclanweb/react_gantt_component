@@ -10,6 +10,13 @@ export enum ViewMode {
   Year = "Year",
 }
 export type TaskType = "task" | "milestone" | "project";
+
+export interface Columns {
+  key: string,
+  value: string
+}
+
+
 export interface Task {
   id: string;
   type: TaskType;
@@ -28,9 +35,12 @@ export interface Task {
   };
   isDisabled?: boolean;
   project?: string;
+  taskType?: string;
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+
+  [key: string]: any;
 }
 
 export interface EventOption {
@@ -44,6 +54,7 @@ export interface DisplayOption {
   viewMode?: ViewMode;
   viewDate?: Date;
   preStepsCount?: number;
+  columns?: Columns[]
   /**
    * Specifies the month name language. Able formats: ISO 639-2, Java Locale
    */

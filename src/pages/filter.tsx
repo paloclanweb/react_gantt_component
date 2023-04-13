@@ -43,8 +43,9 @@ const Filter = () => {
 
   const filterTasks = useMemo(
     () => tasks.filter((task) => {
-      const name = task.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Normalizar y eliminar acentos
-      const search = form.search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase(); // Normalizar, eliminar acentos y convertir a minúsculas
+      const name = task.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Normalize and remove accents
+      const taskType = task.taskType? task.taskType.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : ""; // Normalize and remove accents
+      const search = form.search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase(); // Normalize, remove accents, and convert to lowercase
       
       if(form.from !== "" && form.to !== ""){
         const fromDate = new Date(form.from);
@@ -61,10 +62,10 @@ const Filter = () => {
 
         const itemDate = new Date(task.start);
 
-        return itemDate >= fromDate && itemDate <= toDate && name.toLocaleLowerCase().includes(search)
+        return (itemDate >= fromDate && itemDate <= toDate) && (name.toLocaleLowerCase().includes(search) || taskType.toLocaleLowerCase().includes(search))
       }
       
-      return name.toLocaleLowerCase().includes(search);
+      return name.toLocaleLowerCase().includes(search) || taskType.toLocaleLowerCase().includes(search);
     }),
     [form]
   );
@@ -80,6 +81,7 @@ const Filter = () => {
       {
         filterTasks.length > 0 &&
         <Gantt
+          columns={[{key:"taskType", value:"Task type"}]}
           tasks={filterTasks}
           viewMode={view}
           listCellWidth={"155px"}

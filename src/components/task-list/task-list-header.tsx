@@ -1,5 +1,6 @@
 import React from 'react'
 import tw, { css } from 'twin.macro'
+import { Columns } from "../../types/public-types";
 
 const styles = {
   ganttTable: tw`table border-l-[#e6e4e4] border-l-[solid] border-y-[#e6e4e4] border-y-[solid]`,
@@ -18,8 +19,9 @@ export const TaskListHeaderDefault: React.FC<{
   headerHeight: number
   rowWidth: string
   fontFamily: string
-  fontSize: string
-}> = ({ headerHeight, fontFamily, fontSize, rowWidth }) => {
+  fontSize: string,
+  columns: Columns[]
+}> = ({ headerHeight, fontFamily, fontSize, rowWidth, columns }) => {
   return (
     <div
       css={[styles.ganttTable]}
@@ -42,6 +44,30 @@ export const TaskListHeaderDefault: React.FC<{
         >
           &nbsp;Name
         </div>
+        
+        {
+          columns.map(({key, value})=>{
+            return(
+              <React.Fragment key={key}>
+                <div
+                  css={[styles.ganttTable_HeaderSeparator]}
+                  style={{
+                    height: headerHeight * 0.5,
+                    marginTop: headerHeight * 0.2,
+                  }}
+                />
+                <div
+                  css={[styles.ganttTable_HeaderItem]}
+                  style={{
+                    minWidth: rowWidth,
+                  }}
+                >
+                  &nbsp;{value}
+                </div>
+              </React.Fragment>
+          )})
+        }
+
         <div
           css={[styles.ganttTable_HeaderSeparator]}
           style={{

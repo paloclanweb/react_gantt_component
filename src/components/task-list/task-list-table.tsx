@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import tw, { css } from 'twin.macro'
 
-import { Task } from '../../types/public-types'
+import { Task, Columns } from '../../types/public-types'
 
 const localeDateStringCache: { [key: string]: string } = {}
 const toLocaleDateStringFactory =
@@ -45,13 +45,14 @@ export const TaskListTableDefault: React.FC<{
   fontFamily: string
   fontSize: string
   locale: string
-  tasks: Task[]
-}> = ({ rowHeight, rowWidth, tasks, fontFamily, fontSize, locale }) => {
+  tasks: Task[],
+  columns: Columns[],
+}> = ({ rowHeight, rowWidth, tasks, fontFamily, fontSize, locale, columns }) => {
   const toLocaleDateString = useMemo(
     () => toLocaleDateStringFactory(locale),
     [locale],
   )
-
+  console.log(columns)
   return (
     <div
       css={[styles.taskListWrapper]}
@@ -87,6 +88,24 @@ export const TaskListTableDefault: React.FC<{
                 <div>{t.name}</div>
               </div>
             </div>
+            {
+              columns.map(({key})=>{
+                return(
+                <div
+                    key={key}
+                    css={[styles.taskListCell]}
+                    style={{
+                      minWidth: rowWidth,
+                      maxWidth: rowWidth,
+                    }}
+                    title={t.name}
+                  >
+                    <div css={[styles.taskListNameWrapper]}>
+                      <div>{t[key]}</div>
+                    </div>
+                  </div>
+              )})
+            }
             <div
               css={[styles.taskListCell]}
               style={{

@@ -44,7 +44,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   todayColor = "rgba(252, 248, 227, 0.5)",
   viewDate,
   TaskListHeader = TaskListHeaderDefault,
-  TaskListTable = TaskListTableDefault
+  TaskListTable = TaskListTableDefault,
+  columns = []
 }) => {
   const {
     wrapperRef,
@@ -135,6 +136,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     taskListRef,
     TaskListHeader,
     TaskListTable,
+    columns,
   };
   return (
     <div>
