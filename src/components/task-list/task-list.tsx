@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { BarTask } from "../../types/bar-task";
 import { Task, Columns } from "../../types/public-types";
 
 export type TaskListProps = {
