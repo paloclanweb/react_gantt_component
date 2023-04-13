@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { BarTask } from "../../types/bar-task";
-import { Task } from "../../types/public-types";
+import { Task, Columns } from "../../types/public-types";
 
 export type TaskListProps = {
   headerHeight: number;
@@ -12,6 +12,7 @@ export type TaskListProps = {
   scrollY: number;
   locale: string;
   tasks: Task[];
+  columns: Columns[],
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
   TaskListHeader: React.FC<{
@@ -19,6 +20,7 @@ export type TaskListProps = {
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
+    columns: Columns[],
   }>;
   TaskListTable: React.FC<{
     rowHeight: number;
@@ -27,6 +29,7 @@ export type TaskListProps = {
     fontSize: string;
     locale: string;
     tasks: Task[];
+    columns: Columns[],
   }>;
 };
 
@@ -44,6 +47,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   horizontalContainerClass,
   TaskListHeader,
   TaskListTable,
+  columns
 }) => {
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -57,6 +61,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontFamily,
     fontSize,
     rowWidth,
+    columns
   };
   
   const tableProps = {
@@ -66,6 +71,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontSize,
     tasks,
     locale,
+    columns
   };
 
   return (

@@ -53,7 +53,7 @@ export const VerticalScroll: React.FC<{
         marginTop: headerHeight,
         marginLeft: rtl ? "" : "-1rem",
       }}
-      className={styles.scroll}
+      css={[styles.scroll]}
       onScroll={onScroll}
       ref={scrollRef}
     >

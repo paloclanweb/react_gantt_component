@@ -11,6 +11,7 @@ export function initTasks() {
       type: "project",
       hideChildren: false,
       displayOrder: 1,
+      taskType: "UnKnown"
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
@@ -20,6 +21,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 2,
+      taskType: "Draft"
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
@@ -30,6 +32,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 3,
+      taskType: "Pending"
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
@@ -40,6 +43,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 4,
+      taskType: "Completed"
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
@@ -50,6 +54,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 5,
+      taskType: "Cancelled"
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9),
@@ -60,6 +65,7 @@ export function initTasks() {
       dependencies: ["Task 2"],
       project: "ProjectSample",
       displayOrder: 6,
+      taskType: "Failed"
     },
   ];
   return tasks;
