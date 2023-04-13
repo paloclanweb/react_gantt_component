@@ -19,7 +19,7 @@ export const TaskListHeaderDefault: React.FC<{
   headerHeight: number
   rowWidth: string
   fontFamily: string
-  fontSize: string,
+  fontSize: string
   columns: Columns[]
 }> = ({ headerHeight, fontFamily, fontSize, rowWidth, columns }) => {
   return (

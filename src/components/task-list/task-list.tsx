@@ -19,7 +19,7 @@ export type TaskListProps = {
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
-    columns: Columns[],
+    columns: Columns[];
   }>;
   TaskListTable: React.FC<{
     rowHeight: number;
@@ -28,7 +28,7 @@ export type TaskListProps = {
     fontSize: string;
     locale: string;
     tasks: Task[];
-    columns: Columns[],
+    columns: Columns[];
   }>;
 };
 
