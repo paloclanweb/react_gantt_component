@@ -11,7 +11,8 @@ export type TaskListProps = {
   scrollY: number;
   locale: string;
   tasks: Task[];
-  columns: Columns[],
+  columns: Columns[];
+  showDates: boolean;
   taskListRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
   TaskListHeader: React.FC<{
@@ -20,6 +21,7 @@ export type TaskListProps = {
     fontFamily: string;
     fontSize: string;
     columns: Columns[];
+    showDates: boolean;
   }>;
   TaskListTable: React.FC<{
     rowHeight: number;
@@ -29,6 +31,7 @@ export type TaskListProps = {
     locale: string;
     tasks: Task[];
     columns: Columns[];
+    showDates: boolean;
   }>;
 };
 
@@ -46,7 +49,8 @@ export const TaskList: React.FC<TaskListProps> = ({
   horizontalContainerClass,
   TaskListHeader,
   TaskListTable,
-  columns
+  columns,
+  showDates
 }) => {
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -60,7 +64,8 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontFamily,
     fontSize,
     rowWidth,
-    columns
+    columns,
+    showDates
   };
   
   const tableProps = {
@@ -70,7 +75,8 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontSize,
     tasks,
     locale,
-    columns
+    columns,
+    showDates
   };
 
   return (

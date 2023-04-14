@@ -12,6 +12,7 @@ export type TaskGanttProps = {
   ganttHeight: number;
   scrollY: number;
   scrollX: number;
+  showDates:boolean;
 };
 const styles = {
   ganttVerticalContainer: tw`p-0 m-0 overflow-hidden`,
@@ -25,6 +26,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
   ganttHeight,
   scrollY,
   scrollX,
+  showDates
 }) => {
   const ganttSVGRef = useRef<SVGSVGElement>(null);
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
@@ -55,7 +57,7 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
         height={calendarProps.headerHeight}
         fontFamily={barProps.fontFamily}
       >
-        <Calendar {...calendarProps} />
+        {showDates && <Calendar {...calendarProps} />}
       </svg>
       <div
         ref={horizontalContainerRef}

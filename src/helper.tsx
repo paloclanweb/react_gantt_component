@@ -5,8 +5,9 @@ export function initTasks() {
   const tasks: Task[] = [
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      name: "Some Project",
-      id: "ProjectSample",
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 21),
+      name: "Some PathWay",
+      id: "PathSample",
       progress: 25,
       type: "project",
       hideChildren: false,
@@ -15,6 +16,7 @@ export function initTasks() {
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 5),
       name: "Idea",
       id: "Task 0",
       progress: 45,
@@ -24,7 +26,8 @@ export function initTasks() {
       taskType: "Draft"
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 5),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9),
       name: "Research",
       id: "Task 1",
       progress: 25,
@@ -35,7 +38,8 @@ export function initTasks() {
       taskType: "Pending"
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 13),
       name: "Discussion with team",
       id: "Task 2",
       progress: 10,
@@ -46,7 +50,8 @@ export function initTasks() {
       taskType: "Completed"
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 13),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 17),
       name: "Developing",
       id: "Task 3",
       progress: 2,
@@ -57,7 +62,8 @@ export function initTasks() {
       taskType: "Cancelled"
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9),
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 17),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 21),
       name: "Review",
       id: "Task 4",
       type: "task",

@@ -75,8 +75,8 @@ const Filter = () => {
     <div className="Wrapper">
       <section css={[styles.container]}>
         <Search search={form.search} handleChange={handleChange} />
-        <DateInput name="from" dateText={form.from} handleChange={handleChange} />
-        <DateInput name="to" dateText={form.to} handleChange={handleChange} />
+        {/* <DateInput name="from" dateText={form.from} handleChange={handleChange} />
+        <DateInput name="to" dateText={form.to} handleChange={handleChange} /> */}
       </section>
       {
         filterTasks.length > 0 &&

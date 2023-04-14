@@ -7,7 +7,7 @@ const localeDateStringCache: { [key: string]: string } = {}
 const toLocaleDateStringFactory =
   (locale: string) =>
   (date: Date, dateTimeOptions: Intl.DateTimeFormatOptions) => {
-    if(date){
+    if (date) {
       const key = date.toString()
       let lds = localeDateStringCache[key]
       if (!lds) {
@@ -16,7 +16,6 @@ const toLocaleDateStringFactory =
       }
       return lds
     }
-    
   }
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
   weekday: 'short',
@@ -45,14 +44,23 @@ export const TaskListTableDefault: React.FC<{
   fontFamily: string
   fontSize: string
   locale: string
-  tasks: Task[],
-  columns: Columns[],
-}> = ({ rowHeight, rowWidth, tasks, fontFamily, fontSize, locale, columns }) => {
+  tasks: Task[]
+  columns: Columns[]
+  showDates: boolean
+}> = ({
+  rowHeight,
+  rowWidth,
+  tasks,
+  fontFamily,
+  fontSize,
+  locale,
+  columns,
+  showDates,
+}) => {
   const toLocaleDateString = useMemo(
     () => toLocaleDateStringFactory(locale),
     [locale],
   )
-  console.log(columns)
   return (
     <div
       css={[styles.taskListWrapper]}
@@ -88,42 +96,46 @@ export const TaskListTableDefault: React.FC<{
                 <div>{t.name}</div>
               </div>
             </div>
-            {
-              columns.map(({key})=>{
-                return(
+            {columns.map(({ key }) => {
+              return (
                 <div
-                    key={key}
-                    css={[styles.taskListCell]}
-                    style={{
-                      minWidth: rowWidth,
-                      maxWidth: rowWidth,
-                    }}
-                    title={t.name}
-                  >
-                    <div css={[styles.taskListNameWrapper]}>
-                      <div>{t[key]}</div>
-                    </div>
+                  key={key}
+                  css={[styles.taskListCell]}
+                  style={{
+                    minWidth: rowWidth,
+                    maxWidth: rowWidth,
+                  }}
+                  title={t.name}
+                >
+                  <div css={[styles.taskListNameWrapper]}>
+                    <div>{t[key]}</div>
                   </div>
-              )})
-            }
-            <div
-              css={[styles.taskListCell]}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
-            </div>
-            <div
-              css={[styles.taskListCell]}
-              style={{
-                minWidth: rowWidth,
-                maxWidth: rowWidth,
-              }}
-            >
-              &nbsp;{toLocaleDateString(t.end ?? new Date(), dateTimeOptions)}
-            </div>
+                </div>
+              )
+            })}
+            {showDates && (
+              <>
+                <div
+                  css={[styles.taskListCell]}
+                  style={{
+                    minWidth: rowWidth,
+                    maxWidth: rowWidth,
+                  }}
+                >
+                  &nbsp;{toLocaleDateString(t.start, dateTimeOptions)}
+                </div>
+                <div
+                  css={[styles.taskListCell]}
+                  style={{
+                    minWidth: rowWidth,
+                    maxWidth: rowWidth,
+                  }}
+                >
+                  &nbsp;
+                  {toLocaleDateString(t.end ?? new Date(), dateTimeOptions)}
+                </div>
+              </>
+            )}
           </div>
         )
       })}

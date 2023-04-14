@@ -45,7 +45,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   viewDate,
   TaskListHeader = TaskListHeaderDefault,
   TaskListTable = TaskListTableDefault,
-  columns = []
+  columns = [],
+  showDates = false
 }) => {
   const {
     wrapperRef,
@@ -137,6 +138,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
     columns,
+    showDates,
   };
   return (
     <div>
@@ -154,6 +156,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           ganttHeight={ganttHeight}
           scrollY={scrollY}
           scrollX={scrollX}
+          showDates={showDates}
         />
         <VerticalScroll
           ganttFullHeight={ganttFullHeight}
