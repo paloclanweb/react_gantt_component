@@ -17,7 +17,7 @@ export type TaskItemProps = {
 
 
 const styles = {
-  barLabel: css`${tw`fill-white font-[lighter] select-none pointer-events-none`}
+  barLabel: css`${tw`fill-white select-none pointer-events-none`}
   text-anchor: middle;
   dominant-baseline: central;
   -webkit-touch-callout: none;

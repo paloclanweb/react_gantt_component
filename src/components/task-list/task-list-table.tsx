@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import tw, { css } from 'twin.macro'
 
 import { Task, Columns } from '../../types/public-types'
+import Typography from '../ui/Typography'
 
 const localeDateStringCache: { [key: string]: string } = {}
 const toLocaleDateStringFactory =
@@ -93,7 +94,15 @@ export const TaskListTableDefault: React.FC<{
             >
               <div css={[styles.taskListNameWrapper]}>
                 <div>{expanderSymbol}</div>
-                <div>{t.name}</div>
+                <div>
+                  <Typography
+                    variant="body2"
+                    className="text"
+                    tw="whitespace-nowrap truncate text-contrast-high"
+                  >
+                    <b>{t.name}</b>
+                  </Typography>
+                </div>
               </div>
             </div>
             {columns.map(({ key }) => {
