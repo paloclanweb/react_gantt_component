@@ -21,7 +21,7 @@ export interface Task {
   id: string;
   type: TaskType;
   name: string;
-  start: Date;
+  start?: Date;
   end?: Date;
   /**
    * From 0 to 100
@@ -38,7 +38,7 @@ export interface Task {
   taskType?: string;
   dependencies?: string[];
   hideChildren?: boolean;
-  displayOrder?: number;
+  displayOrder: number;
 
   [key: string]: any;
 }
